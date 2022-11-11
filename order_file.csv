@@ -1,0 +1,6 @@
+Order_N||Customer_name||Address||Phone_No||Items||Time||Status||Courier
+-----------------------------------------------------------------------
+1||test 11||test 11||0912||['Egg Sandwich', 'Chicken Sandwich']||10:50||Out-for-Delivery||uber
+------------------------------------------------------------
+2||test 33||test 33||08923||['Egg Sandwich', 'Chicken Sandwich', 'Beef Sandwich']||10:52||Out-for-Delivery||uber
+------------------------------------------------------------

@@ -1,7 +1,7 @@
 # Import libraries
+import sys
 from datetime import datetime
 import time
-import csv
 
 # CREATE products list as a dictionary
 product_list = {1: 'Egg Sandwich', 2: 'Chicken Sandwich', 3: 'Fish Sandwich', 4: 'Cheese Sandwich',
@@ -21,7 +21,17 @@ def product():
     for key, value in product_list.items():
         print("Number : {} , Item Name :{}".format(key, value))
 
+    # we can use * when we are not sure about the number of arguments
+    # that can be passed to a function.
+    # print(*product_list.values(), sep="\n")
+    # def intro(**data):
+    #    for key, value in product_list.items():
+    #        print("No.{} {}".format(key, value))
+    # intro()
+
 # exit function to end the program
+
+
 def exit():
     string = 'See you later :)  '
     for i in string:
@@ -52,7 +62,7 @@ def make_order():
     order()
 
 # add & delet item function
-def add_delet_status_item():
+def add_delet_status_item(): 
     # while loop to add items to the list
     # until finish will inter 0 to break the while loop
     while 1:
@@ -70,16 +80,15 @@ def add_delet_status_item():
             print('\n', 'Please Enter valid item number', '\n')
             continue
     print('\n', 'Your odrer:', ', '.join(customer_order), '\n')
-
+    
+    
     # confirm order
     print('\n', 'Enter 1 to Confirm 2 to delete an items')
     confirm_item = input()
     confirm_item = int(confirm_item)
     if confirm_item == 1:
-        orders[order_number].append(customer_order)
-        confirm_order_status()
-        couriers()
-        final_order()
+        order_number.append(customer_order)
+        print('\n', '**** Your Order on the way :) ****', '\n')
     # delete items from the list
     elif confirm_item == 2:
         # while loop to delet items from the list
@@ -103,14 +112,37 @@ def add_delet_status_item():
                 print('\n', 'Please Enter STOP to finish Your Order', '\n',
                       'Or Make sure to enter the name of the item you would like to DELETE')
                 continue
-        #Confirm the order
+        # Confirm the order
         print('\n', 'Your Order: ', ', '.join(customer_order), '\n', '\n',
               'Enter 1 to Confirm 2 to go to the main page')
         confirm_item = input()
         confirm_item = int(confirm_item)
         if confirm_item == 1:
-            confirm_order_status()
-            couriers()
+            # confirm order status
+            order_status = {1: "Preparing", 2: "Awaiting Pickup",
+                            3: "Out-for-Delivery", 4: "Delivered"}
+            print('Enter the number of order status:', '\n', '----------------')
+            for key, value in order_status.items():
+                print("Number : {} , Item Name :{}".format(key, value))
+            order_status_now = input()
+            order_status_now = int(order_status_now)
+            while True:
+                try:
+                    if order_status_now in range(1, 4):
+                        # add status to the order
+                        orders[order_number].append(customer_order)
+                        # add the time of the order
+                        now = datetime.now()
+                        order_time = now.strftime("%H:%M")
+                        order_time = str(order_time)
+                        orders[order_number].append(order_time)
+                        orders[order_number].append(
+                            order_status[order_status_now])
+                        break
+                # if there is any error
+                except ValueError:
+                    print("Please Enter valid status Number from (1 to 4)")
+                    continue
 
             print('\n', '**** Your Order on the way :) ****', '\n')
             for item in (orders.keys()):
@@ -122,6 +154,7 @@ def add_delet_status_item():
                       'Order Time', orders[item][4], '\n',
                       'Order Status:', orders[item][5], '\n',
                       'Order Courier:', orders[item][6],)
+                # 'Order item:', str(orders[item][3])[1:-1])
         else:
             main_page()
 
@@ -137,134 +170,79 @@ def order():
     else:
         main_page()
 
-# confirm order status
-def confirm_order_status():
-    while True:
-        order_status = {1: "Preparing", 2: "Awaiting Pickup",
-                    3: "Out-for-Delivery", 4: "Delivered"}
-        print('Enter the number of order status:', '\n', '----------------')
-        for key, value in order_status.items():
-            print("Number: {} , Status:{}".format(key, value))
-        order_status_now = input()
-        order_status_now = int(order_status_now)
- 
-        if order_status_now in order_status.keys():
-                # add the time of the order
-                now = datetime.now()
-                order_time = now.strftime("%H:%M")
-                order_time = str(order_time)
-                orders[order_number].append(order_time)
-                # add status to the order
-                orders[order_number].append(order_status[order_status_now])
-                break
-        else:
-            print("Please Enter valid status Number from (1 to 4)")
-            continue
 
 # order_status (to edit and change order status)
 def edit_order_status():
-    while True:
-        print('Please Enter Order Number: ')
-        ord_number = input()
-        ord_number = int(ord_number)
-        if ord_number in orders.keys():
-            print('', 'Order Details:', '\n', orders[ord_number])
-            print('TO CHANGE ORDER STATUS ENTER 1')
-            ord_change = input()
-            ord_change = int(ord_change)
-            if ord_change == 1:
-                print('Enter the number of order status:', '\n', '----------------')
-                order_status = {1: "Preparing", 2: "Awaiting Pickup",
-                            3: "Out-for-Delivery", 4: "Delivered"}
-                for key, value in order_status.items():
-                    print("Number : {} , Item Name :{}".format(key, value))
-                order_status_now = input()
-                order_status_now = int(order_status_now)
-                orders[ord_number][5] = order_status[order_status_now]
-                print('\n', 'New Order Details:', '\n', orders[ord_number])
-            else:
-                main_page()
-        else:
-            print('This order number in not exist')
-            continue
+    print('Please Enter Order Number: ')
+    ord_number = input()
+    ord_number = int(ord_number)
+    print('', 'Order Details:', '\n', orders[ord_number])
+    print('TO CHANGE ORDER STATUS ENTER 1')
+    ord_change = input()
+    ord_change = int(ord_change)
+    if ord_change == 1:
+        print('Enter the number of order status:', '\n', '----------------')
+        order_status = {1: "Preparing", 2: "Awaiting Pickup",
+                        3: "Out-for-Delivery", 4: "Delivered"}
+        for key, value in order_status.items():
+            print("Number : {} , Item Name :{}".format(key, value))
+        order_status_now = input()
+        order_status_now = int(order_status_now)
+        orders[ord_number][5] = order_status[order_status_now]
+        print('\n', 'New Order Details:', '\n', orders[ord_number])
+    else:
+        main_page()
 
-# couriers
+#couriers
 def couriers():
     print('Couriers Available:', '\n', '----------------')
     for each in couriers_list:
-        print('Courier Number: ', each)
+        print('Courier Number: ' , each)
 
     print('\n', 'Enter the name of the couriers:')
     courier_name = input()
     courier_name = courier_name.lower()
     if courier_name in couriers_list:
         print(courier_name)
-        orders[order_number].append(courier_name)
+        orders[order_number][6] = courier_name
+        order_number.append(courier_name)
+        pass
     else:
         print('Please Enter Courier From Couriers List')
         couriers()
+    
 
-# final order
-def final_order():
-    #write the data to the file
-    sourceFile_1 = open('G:\Generation\mini_project\order_file.txt', 'a')
-    sourceFile_2 = open('G:\Generation\mini_project\order_file.csv','a')
-    print(order_number,*orders[order_number],sep="||", file=sourceFile_1)
-    print('------------------------------------------------------------',
-     file=sourceFile_1)
-    print(order_number,*orders[order_number], sep="||", file=sourceFile_2)
-    print('------------------------------------------------------------',
-          file=sourceFile_2)
-    sourceFile_1.close()
-    sourceFile_2.close()
-
-    print('\n', '**** Your Order on the way :) ****', '\n')
-    for item in (orders.keys()):
-        print('Order Number:', item)
-        print('Customer name:', orders[item][0], '\n',
-              'Address:', orders[item][1], '\n',
-              'Phone No:', orders[item][2], '\n',
-              'Order Items:', orders[item][3], '\n',
-              'Order Time', orders[item][4], '\n',
-              'Order Status:', orders[item][5], '\n',
-              'Order Courier:', orders[item][6],)
 
 
 # main page function
 def main_page():
-    while True:
-        print("Inter Number of the page", '\n',
-            "******* 1    Main Page  ", '\n',
-            "******* 2    Product    ", '\n',
-            "******* 3    Couriers   ", '\n',
-            "******* 4    Make an Order ", '\n',
-            "******* 5    Order Status ", '\n',
-            "******* 6    Exit")
-        x = input('Enter Number: ')
-        x = int(x)
-        if x == 1:
-            print('main')
-            main_page()
-            break
-        elif x == 2:
-            product()
-            break
-        elif x == 3:
-            print('couriers')
-            break
-        elif x == 4:
-            make_order()
-            break
-        elif x == 5:
-            edit_order_status()
-            break
-        elif x == 6:
-            exit()
-            break
-        else:
-            print('\n','Please Enter Valid number of the page you would like to access','\n')
-            continue
-       
-#call main page function
+    print("Inter Number of the page", '\n',
+          "******* 1    Main Page  ", '\n',
+          "******* 2    Product    ", '\n',
+          "******* 3    Couriers   ", '\n',
+          "******* 4    Make an Order ", '\n',
+          "******* 5    Order Status ", '\n',
+          "******* 6    Exit")
+    x = input('Enter Number: ')
+    x = int(x)
+    if x == 1:
+        print('main')
+        main_page()
+    elif x == 2:
+        product()
+    elif x == 3:
+        print('couriers')
+    elif x == 4:
+        make_order()
+    elif x == 5:
+       edit_order_status()
+    elif x == 6:
+        exit()
+    else:
+        print('Please Enter Valid number of the page you would like to access')
+        main_page()
+
+
+# call main page function
 while 1:
     main_page()
