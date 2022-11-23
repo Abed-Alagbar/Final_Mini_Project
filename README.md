@@ -24,7 +24,7 @@ You will incrementally adopt three methods to persist data between user sessions
 • txt: Initially we'll store our data in plaintext files.\
 • csv: As our data changes shape, we'll need to switch to the CSV format.\
 • SQL: Ultimately, we'll finish up using a database.
-\
+
 ## Brief of the code
 In this project I use python and sql to meet the client requirement.\
 In SQL I create database contains product_list, courier, customers, order, order_item columns, which allow the user to insert, present and manipulate the data.\
